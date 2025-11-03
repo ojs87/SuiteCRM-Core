@@ -61,6 +61,12 @@ class CurrencyHandler extends LegacyHandler
 
         /** @var Currency $currency */
         $currency = BeanFactory::getBean('Currencies', $id);
+
+        if (!$currency || $currency->id === null) {
+            $this->close();
+            return $info;
+        }
+
         $info['id'] = $currency->id;
         $info['name'] = $currency->name;
         $info['symbol'] = html_entity_decode($currency->symbol);
