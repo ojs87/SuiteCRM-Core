@@ -117,6 +117,8 @@ class CacheManagerHandler extends LegacyHandler implements CacheManagerInterface
             return;
         }
 
+        $keys = $this->cleanKeys($keys);
+
         $query = "SELECT * FROM cache_rebuild WHERE cache_key IN ('" . implode("', '", $keys) . "')";
         $result = $db->query($query);
 
@@ -150,5 +152,20 @@ class CacheManagerHandler extends LegacyHandler implements CacheManagerInterface
         }
 
         $this->close();
+    }
+
+    /**
+     * @param $keys
+     * @return array
+     */
+    protected function cleanKeys($keys): array
+    {
+        global $db;
+
+        foreach ($keys as $index => $key) {
+            $key = $db->quote($key);
+            $keys[$index] = $key;
+        }
+        return $keys;
     }
 }
