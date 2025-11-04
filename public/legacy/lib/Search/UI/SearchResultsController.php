@@ -108,6 +108,7 @@ class SearchResultsController extends Controller
         }
 
         $total = $this->results->getTotal();
+        $pageCalc = $this->results->getLargestHitsCount();
         if ($total > 1) {
             $size = $this->query->getSize();
             if ($size) {
@@ -117,8 +118,8 @@ class SearchResultsController extends Controller
 
                 $page = (int)($from / $size) + 1;
                 $prev = $page > 1;
-                $next = $total - $from > $size;
-                $last = (int)($total / $size) + ($total % $size === 0 ? 0 : 1);
+                $next = $pageCalc - $from > $size;
+                $last = (int)($pageCalc / $size) + ($pageCalc % $size === 0 ? 0 : 1);
 
                 $this->view->getTemplate()->assign('pagination', [
                     'prev' => $prev,

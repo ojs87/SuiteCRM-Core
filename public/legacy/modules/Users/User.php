@@ -627,6 +627,8 @@ class User extends Person implements EmailInterface
 
         $isUpdate = $this->isUpdate();
 
+        $this->restrictAdminOnlyFields();
+
         //No SMTP server is set up Error.
         $admin = BeanFactory::newBean('Administration');
         $smtp_error = $admin->checkSmtpError();
@@ -695,6 +697,12 @@ class User extends Person implements EmailInterface
             return SugarApplication::redirect('Location: index.php?action=Error&module=Users');
         }
 
+        if (
+            $this->status === 'Inactive' &&
+            (!empty($this->fetched_row['status']) && $this->fetched_row['status'] !== 'Inactive')
+        ) {
+            $this->beforeDisable($this->id);
+        }
 
         $retId = parent::save($check_notify);
         if (!$retId) {
@@ -742,6 +750,15 @@ class User extends Person implements EmailInterface
         }
 
         return $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function mark_deleted($id)
+    {
+        $this->beforeDisable($id);
+        parent::mark_deleted($id);
     }
 
     public function saveFormPreferences()
@@ -2667,5 +2684,116 @@ EOQ;
     protected function isUpdate(): bool
     {
         return !empty($this->id) && !$this->new_with_id;
+    }
+
+    protected function restrictAdminOnlyFields(): void
+    {
+        global $current_user;
+
+        if (is_admin($current_user)){
+            return;
+        }
+
+        if (empty($this->id)) {
+            return;
+        }
+
+        $savedBean = BeanFactory::getBean('Users', $this->id);
+
+        if (empty($savedBean->id)) {
+            return;
+        }
+
+        $adminOnlyFields = [
+            'UserType',
+            'status',
+            'employee_status',
+        ];
+
+        foreach ($adminOnlyFields as $field) {
+            if (isset($this->$field) && $this->$field !== $savedBean->$field) {
+                $this->$field = $savedBean->$field;
+            }
+        }
+    }
+
+    public function hasActionAccess(string $module, string $action): bool
+    {
+        if (is_admin($this) || !$this->bean_implements('ACL')) {
+            return true;
+        }
+
+        return ACLController::checkAccess($module, $action);
+    }
+
+    protected function beforeDisable(string $id): void
+    {
+        /** @var User $user */
+        $user = BeanFactory::getBean('Users', $id);
+        $user->deleteOAuthTokens();
+        $user->deletePersonalOAuthConnections();
+    }
+
+    protected function deleteOAuthTokens(): void
+    {
+        $bean = BeanFactory::newBean('OAuth2Tokens');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where assigned_user_id = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
+    }
+
+    public function deleteOAuthCodes(): void
+    {
+        $bean = BeanFactory::newBean('OAuth2AuthCodes');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where assigned_user_id = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
+    }
+
+    public function deletePersonalOAuthConnections(): void
+    {
+        $bean = BeanFactory::newBean('ExternalOAuthConnection');
+        $userId = $bean->db->quote($this->id);
+        $tableName = $bean->db->quote($bean->getTableName());
+
+        $query = "SELECT id FROM $tableName where created_by = '$userId' AND deleted = 0";
+        $result = $this->db->query($query);
+
+        $row = $this->db->fetchByAssoc($result);
+        while (!empty($row)) {
+            $bean = $bean->retrieve($row['id']);
+            if (empty($bean)) {
+                continue;
+            }
+
+            $bean->mark_deleted($bean->id);
+            $row = $this->db->fetchByAssoc($result);
+        }
     }
 }

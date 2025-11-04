@@ -126,7 +126,7 @@ class SearchResults
         $parsed = [];
 
         foreach ($searchHits as $module => $beans) {
-            foreach ((array)$beans as $bean) {
+            foreach ((array)$beans['results'] as $bean) {
                 $obj = BeanFactory::getBean($module, $bean);
 
                 // if a search found a bean but suitecrm does not, it could happens
@@ -334,6 +334,11 @@ class SearchResults
     {
         return $this->total;
     }
+    
+    public function getModuleTotal($module) :?int
+    {
+        return $this->getHits()[$module]['totalHits'];
+    }
 
     /**
      * @return mixed[]|null
@@ -369,5 +374,15 @@ class SearchResults
     public function isGroupedByModule(): bool
     {
         return $this->groupedByModule;
+    }
+    
+    public function getLargestHitsCount() 
+    {
+        $largest = 0;
+        foreach($this->getHits() as $hit) 
+        {
+            $largest = max($largest, $hit['totalHits']);
+        }
+        return $largest;
     }
 }

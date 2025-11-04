@@ -5495,7 +5495,7 @@ class InboundEmail extends SugarBean
             ////	ASSIGN APPROPRIATE ATTRIBUTES TO NEW EMAIL OBJECT
             // handle UTF-8/charset encoding in the ***headers***
 
-            $email->name = purify_html($this->handleMimeHeaderDecode($parsedFullHeader->subject));
+            $email->name = purify_html($this->handleMimeHeaderDecode($header->subject));
             $email->type = 'inbound';
             if (!empty($unixHeaderDate)) {
                 $email->date_sent_received = $timedate->asUser($unixHeaderDate);
@@ -6949,6 +6949,10 @@ class InboundEmail extends SugarBean
 
         /** @var User $owner */
         $owner = BeanFactory::getBean('Users', $createdBy);
+
+        if (!$owner || $owner->id === null) {
+            return;
+        }
 
         $emailSignatures = $owner->getPreference('account_signatures', 'Emails') ?? '';
         $emailSignatures = sugar_unserialize(base64_decode($emailSignatures));
