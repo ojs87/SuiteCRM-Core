@@ -127,6 +127,7 @@ $app_list_strings = array(
         'Calendar' => 'Calendar',
         'Leads' => 'Lead',
         'Activities' => 'Activity',
+        'History' => 'History',
         'Bugs' => 'Bug',
         'KBDocuments' => 'KBDocument',
         'Feeds' => 'RSS',
