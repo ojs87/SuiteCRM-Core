@@ -76,15 +76,15 @@ export class DatetimeFormatter implements Formatter {
         return this.getInternalDateFormat();
     }
 
-    getTimeFormat(): string {
+    getTimeFormat(map = true): string {
 
         const timeFormatPreference = this.preferences.getUserPreference('time_format');
 
         if (timeFormatPreference) {
             let format: string = timeFormatPreference;
 
-            if (format.includes('aaaaaa')) {
-                format = format.replace('aaaaaa', 'aaaaa\'m\'');
+            if (format.includes('aaaaaa') && map) {
+                format = format.replace('aaaaaa', 'a');
             }
 
             return format;
@@ -138,7 +138,14 @@ export class DatetimeFormatter implements Formatter {
             if (!dateTime.isValid) {
                 return dateString;
             }
-            return  DateTime.fromJSDate(dateTime.toJSDate(), {zone: this.preferences.getUserPreference('timezone')}).toFormat(toFormat, {locale: this.locale})
+
+            let date = DateTime.fromJSDate(dateTime.toJSDate(), {zone: this.preferences.getUserPreference('timezone')}).toFormat(toFormat, {locale: this.locale})
+            if (this.getTimeFormat(false).includes('aaaaaa')) {
+                date = date.replace('A', 'a');
+                date = date.replace('P', 'p');
+                date = date.replace('M', 'm');
+            }
+            return date;
         }
         return '';
     }
