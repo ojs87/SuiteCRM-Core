@@ -55,15 +55,6 @@ abstract class BaseStepExecutorCommand extends BaseCommand
             error_reporting(E_ALL);
         }
 
-        if ($this->checkRunningUser($input, $output) === 1) {
-            $output->writeln([
-                '',
-                'Exiting as requested',
-                '========================='
-            ]);
-            return Command::FAILURE;
-        }
-
         $output->writeln([
             '',
             $this->getTitle(),

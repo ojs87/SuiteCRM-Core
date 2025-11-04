@@ -64,16 +64,6 @@ class RunSchedulersCommand extends BaseCommand
         $runningUser = $this->cronHandler->getRunningUser();
         $this->authentication->initLegacySystemSession();
 
-        if ($this->checkRunningUser($input, $output) === 1) {
-            $this->lastRun->setLastRun($this->getName(), $runningUser);
-            $output->writeln([
-                '',
-                'Exiting as requested',
-                '========================='
-            ]);
-            return Command::FAILURE;
-        }
-
         $allowed = $this->cronHandler->isAllowedCronUser();
 
         if (!$allowed) {
