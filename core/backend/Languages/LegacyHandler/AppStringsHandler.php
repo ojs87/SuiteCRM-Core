@@ -32,9 +32,10 @@ use App\Engine\LegacyHandler\LegacyHandler;
 use App\Engine\LegacyHandler\LegacyScopeState;
 use App\Install\LegacyHandler\InstallHandler;
 use App\Languages\Entity\AppStrings;
+use App\Languages\Service\AppStringsProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class AppStringsHandler extends LegacyHandler
+class AppStringsHandler extends LegacyHandler implements AppStringsProviderInterface
 {
     protected const MSG_LANGUAGE_NOT_FOUND = 'Not able to get language: ';
     public const HANDLER_KEY = 'app-strings';
