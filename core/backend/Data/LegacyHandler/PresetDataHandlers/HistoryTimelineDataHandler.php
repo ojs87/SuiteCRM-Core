@@ -33,9 +33,9 @@ use App\Data\LegacyHandler\PresetListDataHandlerInterface;
 use App\Data\LegacyHandler\RecordMapper;
 use App\Engine\LegacyHandler\LegacyScopeState;
 use App\FieldDefinitions\Service\FieldDefinitionsProviderInterface;
+use App\Languages\Service\LanguageManagerInterface;
 use App\Module\Service\ModuleNameMapperInterface;
 use App\Statistics\StatisticsHandlingTrait;
-use App\Languages\Service\LanguageManagerInterface;
 use BadMethodCallException;
 use BeanFactory;
 use Psr\Log\LoggerAwareInterface;
@@ -81,8 +81,15 @@ class HistoryTimelineDataHandler extends SubpanelDataQueryHandler implements Pre
         protected FieldDefinitionsProviderInterface $fieldDefinitionProvider,
         protected LanguageManagerInterface $languageManager
     ) {
-        parent::__construct($projectDir, $legacyDir, $legacySessionName, $defaultSessionName, $legacyScopeState,
-            $moduleNameMapper, $session);
+        parent::__construct(
+            $projectDir,
+            $legacyDir,
+            $legacySessionName,
+            $defaultSessionName,
+            $legacyScopeState,
+            $moduleNameMapper,
+            $session
+        );
     }
 
     /**
@@ -322,8 +329,14 @@ class HistoryTimelineDataHandler extends SubpanelDataQueryHandler implements Pre
 
             /** @var User $user */
             $user = BeanFactory::getBean('Users', $record['assigned_user_id']);
-            $listData[$key]['assigned_user_name']['user_name'] = showFullName() ? $user->full_name : ($user->user_name ?? '');
-            $listData[$key]['assigned_user_name']['user_id'] = $record['assigned_user_id'];
+
+            $userName = $this->languageManager->getAppLabel('LBL_UNKNOWN_USER');
+            if (!empty($user)) {
+                $userName = showFullName() ? ($user?->full_name ?? $user?->user_name ?? '') : ($user?->user_name ?? '');
+            }
+
+            $listData[$key]['assigned_user_name']['user_name'] = $userName;
+            $listData[$key]['assigned_user_name']['user_id'] = $record['assigned_user_id'] ?? '';
             $listData[$key]['module_name'] = $panelToModuleName[$listData[$key]['panel_name']];
         }
 
