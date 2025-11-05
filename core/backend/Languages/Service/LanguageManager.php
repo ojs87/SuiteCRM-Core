@@ -31,7 +31,6 @@ use App\Authentication\LegacyHandler\UserHandler;
 use App\FieldDefinitions\Service\FieldDefinitionsProviderInterface;
 use App\Languages\LegacyHandler\AppListStringsProviderInterface;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class LanguageManager implements LanguageManagerInterface
 {
@@ -39,6 +38,7 @@ class LanguageManager implements LanguageManagerInterface
     public function __construct(
         protected FieldDefinitionsProviderInterface $fieldDefinitionsProvider,
         protected AppListStringsProviderInterface $appListStringsProvider,
+        protected AppStringsProviderInterface $appStringsProvider,
         protected UserHandler $userHandler,
         protected LoggerInterface $logger
     ) {
@@ -67,6 +67,27 @@ class LanguageManager implements LanguageManagerInterface
         }
 
         return $translatedOptions[$value] ?? $value;
+    }
+
+    public function getAppLabel(string $labelKey): string
+    {
+        if (empty($labelKey)) {
+            return $labelKey;
+        }
+
+        $language = $this->userHandler->getCurrentLanguage();
+
+        $appStrings = $this->appStringsProvider->getAppStrings($language);
+        if (!$appStrings) {
+            return $labelKey;
+        }
+
+        $label = $appStrings->getItems()[$labelKey] ?? null;
+        if (!is_string($label)) {
+            return $labelKey;
+        }
+
+        return $label;
     }
 
 }

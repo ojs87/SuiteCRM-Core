@@ -41,4 +41,12 @@ interface LanguageManagerInterface
      */
     public function getListLabel(string $module, string $fieldName, string $value): string;
 
+    /**
+     * Translate app value using AppStrings for current language
+     *
+     * @param string $labelKey The raw list value to translate
+     * @return string The translated value, or original value if translation fails
+     */
+    public function getAppLabel(string $labelKey): string;
+
 }
