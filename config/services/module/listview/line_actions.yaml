@@ -118,6 +118,18 @@ parameters:
     email-templates:
       exclude:
         - modal-create
+    inbound-email:
+      exclude:
+        - modal-create
+    outbound-email-accounts:
+      exclude:
+        - modal-create
+    external-oauth-connection:
+      exclude:
+        - modal-create
+    external-oauth-provider:
+      exclude:
+        - modal-create
     surveys:
       exclude:
         - modal-create
