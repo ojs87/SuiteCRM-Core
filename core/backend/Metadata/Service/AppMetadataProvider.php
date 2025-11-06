@@ -249,9 +249,12 @@ class AppMetadataProvider implements AppMetadataProviderInterface
     protected function getDefaultMetadataLanguage(): ?string
     {
         $language = $this->getDefaultLanguage();
-        $sessionLanguage = $this->userHandler->getSessionLanguage();
-        if (!empty($sessionLanguage)) {
-            $language = $sessionLanguage;
+
+        if ($this->security->isGranted('ROLE_USER')) {
+            $sessionLanguage = $this->userHandler->getSessionLanguage();
+            if (!empty($sessionLanguage)) {
+                $language = $sessionLanguage;
+            }
         }
 
         return $language;
