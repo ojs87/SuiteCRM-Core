@@ -62,15 +62,28 @@
                             <div class="card">
                                 <div class="card-body p-1 pr-2 pl-2">
                                     <p class="card-title text-break history-timeline-entry-title">
-                                        <a *ngIf="entry.record.module !== 'audit' && entry.record.module !== 'emailman'"
-                                           [routerLink]="redirectLink(entry.record.module, entry.record.id)"
-                                        >
-                                            <scrm-field [type]="entry.title.type"
-                                                        mode="list"
-                                                        [field]="entry.title"
-                                                        [record]="entry.record">
-                                            </scrm-field>
-                                        </a>
+                                        <ng-container *ngIf="entry.record.module !== 'audit' && entry.record.module !== 'emailman'">
+                                            <ng-container *ngIf="entry?.hasAccess">
+                                                <a [routerLink]="redirectLink(entry.record.module, entry.record.id)">
+                                                    <scrm-field [type]="entry.title.type"
+                                                                mode="list"
+                                                                [field]="entry.title"
+                                                                [record]="entry.record">
+                                                    </scrm-field>
+                                                </a>
+                                            </ng-container>
+                                            <ng-container *ngIf="!entry?.hasAccess">
+                                                <a>
+                                                    <scrm-field [type]="entry.title.type"
+                                                                mode="list"
+                                                                [field]="entry.title"
+                                                                [record]="entry.record">
+                                                    </scrm-field>
+                                                </a>
+                                            </ng-container>
+
+                                        </ng-container>
+
                                         <a *ngIf="entry.record.module === 'audit' || entry.record.module === 'emailman'">
                                             <scrm-field [type]="entry.title.type"
                                                         mode="list"

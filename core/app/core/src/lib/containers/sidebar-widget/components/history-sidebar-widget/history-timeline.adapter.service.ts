@@ -33,6 +33,7 @@ import {Record} from '../../../../common/record/record.model';
 import {ViewContext} from '../../../../common/views/view.model';
 import {take} from 'rxjs/operators';
 import {HistoryTimelineStoreFactory} from './history-timeline.store.factory';
+import {ModuleNavigation} from "../../../../services/navigation/module-navigation/module-navigation.service";
 
 export type ActivityTypes = 'calls' | 'tasks' | 'meetings' | 'history' | 'audit' | 'notes' | string;
 
@@ -50,7 +51,9 @@ export class HistoryTimelineAdapter {
     private defaultPageSize = 10;
     private store: HistoryTimelineStore;
 
-    constructor(protected historyTimelineStoreFactory: HistoryTimelineStoreFactory
+    constructor(
+        protected historyTimelineStoreFactory: HistoryTimelineStoreFactory,
+        protected navigation: ModuleNavigation
     ) {
     }
 
@@ -150,15 +153,16 @@ export class HistoryTimelineAdapter {
             user: {
                 type: 'varchar',
                 value: record.attributes.assigned_user_name.user_name,
-                loading:  signal(false),
+                loading: signal(false),
                 display: signal('default')
             },
             date: {
                 type: 'datetime',
                 value: record.attributes.date_end,
-                loading:  signal(false),
+                loading: signal(false),
                 display: signal('default')
             },
+            hasAccess: this.navigation.hasAccessToModule(record?.module ?? '') ?? '',
             record
         } as HistoryTimelineEntry;
 
@@ -170,6 +174,7 @@ export class HistoryTimelineAdapter {
                 loading: signal(false),
                 display: signal('default')
             };
+            timelineEntry.hasAccess = true;
         }
         return timelineEntry;
     }

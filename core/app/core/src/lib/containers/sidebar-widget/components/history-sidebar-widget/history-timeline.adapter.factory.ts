@@ -27,6 +27,7 @@
 import {Injectable} from '@angular/core';
 import {HistoryTimelineAdapter} from "./history-timeline.adapter.service";
 import {HistoryTimelineStoreFactory} from "./history-timeline.store.factory";
+import {ModuleNavigation} from "../../../../services/navigation/module-navigation/module-navigation.service";
 
 
 @Injectable({
@@ -34,12 +35,16 @@ import {HistoryTimelineStoreFactory} from "./history-timeline.store.factory";
 })
 export class HistoryTimelineAdapterFactory {
 
-    constructor(protected historyTimelineStoreFactory: HistoryTimelineStoreFactory) {
+    constructor(
+        protected historyTimelineStoreFactory: HistoryTimelineStoreFactory,
+        protected navigation: ModuleNavigation
+    ) {
     }
 
     create(): HistoryTimelineAdapter {
         return new HistoryTimelineAdapter(
-            this.historyTimelineStoreFactory
+            this.historyTimelineStoreFactory,
+            this.navigation
         );
     }
 }

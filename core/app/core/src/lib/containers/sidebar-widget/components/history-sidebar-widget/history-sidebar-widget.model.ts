@@ -36,4 +36,5 @@ export interface HistoryTimelineEntry {
     date: Field;
     record: Record;
     description?: Field;
+    hasAccess?: boolean;
 }
