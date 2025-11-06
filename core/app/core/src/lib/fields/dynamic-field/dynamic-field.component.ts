@@ -86,21 +86,29 @@ export class DynamicFieldComponent implements OnInit, OnDestroy {
     }
 
     get getRelateLink(): string {
+        let linkModule = this.getLinkModule();
+
+        if (this.field.definition.id_name && linkModule) {
+            return this.navigation.getRecordRouterLink(
+                linkModule,
+                this.record.attributes[this.field.definition.id_name]
+            );
+        }
+
+        return '';
+    }
+
+    protected getLinkModule(): string {
         let linkModule = this.field.definition.module ?? this.record.attributes[this.field.definition.type_name];
 
         if (this.field.definition.type_name === 'parent_type') {
             linkModule = this.record.attributes.parent_type;
         }
 
-        if (this.field.definition.id_name && linkModule) {
-            const moduleName = this.moduleNameMapper.toFrontend(linkModule);
-            return this.navigation.getRecordRouterLink(
-                moduleName,
-                this.record.attributes[this.field.definition.id_name]
-            );
+        if (linkModule) {
+            linkModule = this.moduleNameMapper.toFrontend(linkModule);
         }
-
-        return '';
+        return linkModule ?? '';
     }
 
     ngOnInit(): void {
@@ -165,7 +173,12 @@ export class DynamicFieldComponent implements OnInit, OnDestroy {
         }
 
         if (this.type === 'relate') {
-            return true;
+            let linkModule = this.getLinkModule();
+            return this.navigation?.hasAccessToModule(linkModule) ?? false
+        }
+
+        if (this?.record?.module && !this.navigation?.hasAccessToModule(this?.record?.module)) {
+            return false;
         }
 
         return !!(this?.field?.metadata && this?.field?.metadata?.link);
@@ -197,8 +210,6 @@ export class DynamicFieldComponent implements OnInit, OnDestroy {
 
         return this.navigation.getRecordRouterLink(this.record.module, this.record.id);
     }
-
-
 
 
     onClick(): boolean {
