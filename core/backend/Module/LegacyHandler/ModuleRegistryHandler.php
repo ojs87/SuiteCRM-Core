@@ -180,7 +180,7 @@ class ModuleRegistryHandler extends LegacyHandler implements ModuleRegistryInter
     {
         global $current_user;
 
-        $actions = ACLAction::getUserActions($current_user->id, true);
+        $actions = ACLAction::getUserActions($current_user->id);
         foreach ($actions as $key => $value) {
             if (!isset($value['module'])) {
                 continue;
