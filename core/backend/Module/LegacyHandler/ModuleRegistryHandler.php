@@ -102,6 +102,7 @@ class ModuleRegistryHandler extends LegacyHandler implements ModuleRegistryInter
 
         $modules['SecurityGroups'] = '';
         $modules['History'] = '';
+        $modules['Activities'] = '';
 
         $modules = $this->applyUserActionFilter($modules);
 
