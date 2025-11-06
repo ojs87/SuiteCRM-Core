@@ -46,7 +46,10 @@ class ModStringsHandler extends LegacyHandler
         'SecurityGroups',
         'Bugs',
         'History',
-        'Activities'
+        'Activities',
+        'Meetings',
+        'Tasks',
+        'Notes'
     ];
 
     /**
