@@ -33,6 +33,7 @@ import {StateStore} from '../state';
 import {deepClone} from '../../common/utils/object-utils';
 import {ObjectMap} from '../../common/types/object-map';
 import {Params} from '@angular/router';
+import {isEmpty} from "lodash-es";
 
 export interface Navigation {
     tabs: string[];
@@ -141,12 +142,12 @@ export class NavigationStore implements StateStore {
 
 
         this.vm$ = this.tabs$.pipe(
-                combineLatestWith(this.groupedTabs$, this.modules$, this.userActionMenu$, this.maxTabs$,  this.quickActions$),
-                map(([tabs, groupedTabs, modules, userActionMenu, maxTabs, quickActions]) => ({
+            combineLatestWith(this.groupedTabs$, this.modules$, this.userActionMenu$, this.maxTabs$, this.quickActions$),
+            map(([tabs, groupedTabs, modules, userActionMenu, maxTabs, quickActions]) => ({
                     tabs, groupedTabs, modules, userActionMenu, maxTabs, quickActions
                 })
-                )
-            );
+            )
+        );
     }
 
 
@@ -213,6 +214,17 @@ export class NavigationStore implements StateStore {
     }
 
     /**
+     * Check if the user has access to a module
+     * @param module
+     */
+    public hasAccessToModule(module: string): boolean {
+        if (!internalState.modules || isEmpty(internalState.modules)) {
+            return true;
+        }
+        return !!(internalState.modules[module] ?? false);
+    }
+
+    /**
      * Internal API
      */
 
@@ -263,7 +275,7 @@ export class NavigationStore implements StateStore {
                             userActionMenu: data.navbar.userActionMenu,
                             modules: data.navbar.modules,
                             maxTabs: data.navbar.maxTabs,
-                            quickActions : data?.navbar?.quickActions ?? [],
+                            quickActions: data?.navbar?.quickActions ?? [],
                         };
 
                     }

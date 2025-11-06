@@ -26,7 +26,7 @@
 
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {ModuleAction, NavbarModule, Navigation} from '../../../store/navigation/navigation.store';
+import {ModuleAction, NavbarModule, Navigation, NavigationStore} from '../../../store/navigation/navigation.store';
 import {LanguageListStringMap, LanguageStrings} from '../../../store/language/language.store';
 import {MenuItem} from '../../../common/menu/menu.model';
 import {Record} from '../../../common/record/record.model';
@@ -49,7 +49,8 @@ export class ModuleNavigation {
     constructor(
         protected router: Router,
         protected moduleNameMapper: ModuleNameMapper,
-        protected actionNameMapper: ActionNameMapper
+        protected actionNameMapper: ActionNameMapper,
+        protected navigation: NavigationStore
     ) {
     }
 
@@ -313,5 +314,13 @@ export class ModuleNavigation {
         }
 
         return returnModule;
+    }
+
+    /**
+     * Check if the user has access to a module
+     * @param module
+     */
+    public hasAccessToModule(module: string): boolean {
+       return this.navigation.hasAccessToModule(module);
     }
 }
