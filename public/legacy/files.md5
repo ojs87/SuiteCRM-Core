@@ -1,5 +1,5 @@
 <?php
-// created: 2025-11-04 17:00:00
+// created: 2026-01-08 17:00:00
 $md5_string = array (
   './Api/Core/Config/ApiConfig.php' => '7c960715776e20734ce8839f7d75f277',
   './Api/Core/Config/slim.php' => 'b134e68765e6a1403577e2a5a06322b8',
@@ -2445,7 +2445,7 @@ $md5_string = array (
   './include/portability/System/Upgrade/PostUpgrade.php' => '2f30f33f099b75fd4e5dc8e4f9106d2a',
   './include/portability/User/CreateUser.php' => '263000a98d2b2438da2283598b8cab85',
   './include/portability/action_name_map.php' => '075af017658da848f5c7f635c1f3c27f',
-  './include/portability/classicview_routing_exclusions.php' => '23bd778461355167719d4958a01431b5',
+  './include/portability/classicview_routing_exclusions.php' => 'e4cb48688dd194390e8be96c1508fe7a',
   './include/portability/module_name_map.php' => '20d45b1594c3cce1749466fe488179a6',
   './include/resource/Observers/ResourceObserver.php' => '62df10eef4c6520d4b73eb92ceaa81f7',
   './include/resource/Observers/SoapResourceObserver.php' => '9fe1665064f52d9f0a4d62ecf5c37cd8',
@@ -4117,7 +4117,7 @@ $md5_string = array (
   './modules/Campaigns/language/en_us.lang.php' => '112ba7346aa83002f826c0acd33cec0e',
   './modules/Campaigns/metadata/SearchFields.php' => '426d580999da5212587ee97c005c4ac7',
   './modules/Campaigns/metadata/additionalDetails.php' => '2f7e569f7b15d6ba50c7248cdbe7a896',
-  './modules/Campaigns/metadata/detailviewdefs.php' => '076a8865b7cfa905704abd5370999b21',
+  './modules/Campaigns/metadata/detailviewdefs.php' => 'ee80b410ee9f44f334acd6d21d9b7192',
   './modules/Campaigns/metadata/editviewdefs.php' => '3a2839148a060c786a858a76fcf84ad2',
   './modules/Campaigns/metadata/listviewdefs.php' => 'c0484aa9da63f1d03092aed0118b4aa7',
   './modules/Campaigns/metadata/popupdefs.php' => '9aeec46c9c1da4c7e68f15cfa9c8ecc8',
@@ -6078,7 +6078,7 @@ $md5_string = array (
   './modules/Users/SetTimezone.tpl' => '04121b0c30d70f78c14ac7648f9627dd',
   './modules/Users/UpdateTourStatus.php' => 'cc111e28e6df1d96b98678661dd42490',
   './modules/Users/User.js' => '351f8d8e74bd1bd0a56dcc2bae31b147',
-  './modules/Users/User.php' => '6d23d45f919797a07dc0901ca209e8f1',
+  './modules/Users/User.php' => '272cb6da3286223c8d977f7bbb91e604',
   './modules/Users/UserEditView.js' => 'b33651ad97f4423b09dd4defc1f51808',
   './modules/Users/UserEmailOptions.tpl' => '96b848efbf7f6d4fee7b6bf13a1a1aee',
   './modules/Users/UserEmailSettings.tpl' => '5d9ff3379f63dcf7c5efbbcc3e88d8ed',
@@ -6359,7 +6359,7 @@ $md5_string = array (
   './soap.php' => 'e28988c2e0b8e2c484587b537a710525',
   './sugar_version.json' => 'bdfbcefae2f9af559bef6a36367df7bb',
   './sugar_version.php' => 'db7b6c8d51f87879fce1e6172eedfbed',
-  './suitecrm_version.php' => '5f2b0d32b3e57f1f0b8f5c8c79e15f68',
+  './suitecrm_version.php' => '12c8815635ed3af277fa45881b7a5b6b',
   './themes/default/css/bootstrap.css' => '35cda076a2dfccfb460b8225f38c104f',
   './themes/default/css/chart.css' => 'cc19057a4b20d6f05bcd382e25f19fa2',
   './themes/default/css/content.min.css' => '9b6a853cc6a9e8cb9e46bfc11eb0d609',
